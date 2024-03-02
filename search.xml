@@ -11,29 +11,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>Linux 串口编程</title>
-    <url>/2020/03/11/Linux%20%E4%B8%B2%E5%8F%A3%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p>Linux 串口编程</p>
-<a id="more"></a>
-<h1 align = "center">Linux 串口编程</h1>
-
-
-
-<p><strong>1.串口接收超时设置</strong></p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 接收单字节</span></span><br><span class="line"><span class="keyword">int</span> _uart_recv_byte(<span class="keyword">miio_uart_t</span> *uart, <span class="keyword">uint8_t</span>* c, <span class="keyword">uint32_t</span> timeout_ms)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">/* the following is an example for linux platform */</span></span><br><span class="line">	<span class="comment">/* user should adjust below for each mcu platform */</span></span><br><span class="line">	<span class="comment">/* adjust start */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">opt</span>;</span>	<span class="comment">/* set uart timeout */</span></span><br><span class="line">	tcgetattr(uart-&gt;fd, &amp;opt);</span><br><span class="line">	opt.c_cc[VTIME] = timeout_ms / <span class="number">100</span>; </span><br><span class="line">	tcsetattr(uart-&gt;fd, TCSADRAIN, &amp;opt);</span><br><span class="line">	<span class="comment">/* adjust end */</span></span><br><span class="line"></span><br><span class="line">	arch_os_mutex_get(&amp;(uart-&gt;read_mutex));</span><br><span class="line">	<span class="comment">/* adjust start */</span></span><br><span class="line">	<span class="keyword">int</span> n_read = <span class="built_in">read</span>(uart-&gt;fd, c, <span class="number">1</span>);</span><br><span class="line">	<span class="comment">/* adjust end */</span></span><br><span class="line">	arch_os_mutex_put(&amp;(uart-&gt;read_mutex));</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> n_read;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接收多个字节</span></span><br><span class="line"><span class="keyword">int</span> _Xmodem_recv_str(<span class="keyword">miio_uart_t</span> *uart, <span class="keyword">uint8_t</span>* buf, <span class="keyword">uint32_t</span> timeout_ms)</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* the following is an example for linux platform */</span></span><br><span class="line">        <span class="comment">/* user should adjust below for each mcu platform */</span></span><br><span class="line">        <span class="comment">/* adjust start */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">opt</span>;</span>     <span class="comment">/* set uart timeout */</span></span><br><span class="line">        tcgetattr(uart-&gt;fd, &amp;opt);</span><br><span class="line">        opt.c_cc[VTIME] = timeout_ms / <span class="number">100</span>;<span class="comment">// / 100;</span></span><br><span class="line">        tcsetattr(uart-&gt;fd, TCSADRAIN, &amp;opt);</span><br><span class="line">        <span class="comment">/* adjust end */</span></span><br><span class="line">        arch_os_mutex_get(&amp;(uart-&gt;read_mutex));</span><br><span class="line">        <span class="comment">/* adjust start */</span></span><br><span class="line">        <span class="keyword">int</span> n_read = <span class="built_in">read</span>(uart-&gt;fd, buf, USER_UART_RXBUF_SIZE);</span><br><span class="line">        buf[n_read] = <span class="string">'\0'</span>;</span><br><span class="line">        <span class="comment">/* adjust end */</span></span><br><span class="line">        arch_os_mutex_put(&amp;(uart-&gt;read_mutex));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> n_read;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
-    <title>CMake 笔记</title>
-    <url>/2020/03/12/CMake_%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<p>CMake 笔记</p>
-<a id="more"></a>
-<p><a href="https://github.com/fenneishi/cmake" target="_blank" rel="noopener">CMake_资料1</a></p>
-<p>example:</p>
-<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cmake版本要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目信息</span></span><br><span class="line"><span class="keyword">project</span>(DummyImport CXX)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定为C++11 版本</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加头文件目录</span></span><br><span class="line"><span class="keyword">include_directories</span>(../../single_include)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定生成目标</span></span><br><span class="line"><span class="keyword">add_executable</span>(create_json main.cpp)</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
     <title>c++ 笔记</title>
     <url>/2022/05/07/C++%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<p>c++ 笔记<br><a id="more"></a></p>
@@ -61,26 +38,26 @@
 ]]></content>
   </entry>
   <entry>
-    <title>下载Zlib</title>
-    <url>/2020/03/11/Zlib%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8C++/</url>
-    <content><![CDATA[<p>下载Zlib</p>
+    <title>CMake 笔记</title>
+    <url>/2020/03/12/CMake_%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>CMake 笔记</p>
 <a id="more"></a>
-<p><strong>1.下载Zlib</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget  http:&#x2F;&#x2F;www.zlib.net&#x2F;zlib-1.2.12.tar.gz</span><br></pre></td></tr></table></figure>
-<p><strong>2.解压安装包</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxvf zlib-1.2.12.tar.gz</span><br></pre></td></tr></table></figure>
-<p><strong>3.配置编译程序存放路径</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure --prefix&#x3D;&#x2F;home&#x2F;saber&#x2F;Downloads&#x2F;zlib_build&#x2F;</span><br></pre></td></tr></table></figure>
-<p><strong>4. 修改链接库,配置交叉编译工具</strong></p>
+<p><a href="https://github.com/fenneishi/cmake" target="_blank" rel="noopener">CMake_资料1</a></p>
+<p>example:</p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cmake版本要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目信息</span></span><br><span class="line"><span class="keyword">project</span>(DummyImport CXX)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定为C++11 版本</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加头文件目录</span></span><br><span class="line"><span class="keyword">include_directories</span>(../../single_include)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定生成目标</span></span><br><span class="line"><span class="keyword">add_executable</span>(create_json main.cpp)</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>Linux 串口编程</title>
+    <url>/2020/03/11/Linux%20%E4%B8%B2%E5%8F%A3%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p>Linux 串口编程</p>
+<a id="more"></a>
+<h1 align = "center">Linux 串口编程</h1>
 
-<p><strong>5.安装</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo make &amp; make install</span><br></pre></td></tr></table></figure>
-<p><strong>6.检查编译结果</strong></p>
 
-<p><strong>二、下载安装UnZip</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;sourceforge.net&#x2F;projects&#x2F;infozip&#x2F;files&#x2F;UnZip%206.x%20%28latest%29&#x2F;UnZip%206.0&#x2F;unzip60.tar.gz</span><br></pre></td></tr></table></figure>
-<p>安装</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;unix&#x2F;configure</span><br><span class="line">cp .&#x2F;unix&#x2F;Makefile .</span><br><span class="line">make</span><br><span class="line">make generic</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+
+<p><strong>1.串口接收超时设置</strong></p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 接收单字节</span></span><br><span class="line"><span class="keyword">int</span> _uart_recv_byte(<span class="keyword">miio_uart_t</span> *uart, <span class="keyword">uint8_t</span>* c, <span class="keyword">uint32_t</span> timeout_ms)</span><br><span class="line">&#123;</span><br><span class="line">	<span class="comment">/* the following is an example for linux platform */</span></span><br><span class="line">	<span class="comment">/* user should adjust below for each mcu platform */</span></span><br><span class="line">	<span class="comment">/* adjust start */</span></span><br><span class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">opt</span>;</span>	<span class="comment">/* set uart timeout */</span></span><br><span class="line">	tcgetattr(uart-&gt;fd, &amp;opt);</span><br><span class="line">	opt.c_cc[VTIME] = timeout_ms / <span class="number">100</span>; </span><br><span class="line">	tcsetattr(uart-&gt;fd, TCSADRAIN, &amp;opt);</span><br><span class="line">	<span class="comment">/* adjust end */</span></span><br><span class="line"></span><br><span class="line">	arch_os_mutex_get(&amp;(uart-&gt;read_mutex));</span><br><span class="line">	<span class="comment">/* adjust start */</span></span><br><span class="line">	<span class="keyword">int</span> n_read = <span class="built_in">read</span>(uart-&gt;fd, c, <span class="number">1</span>);</span><br><span class="line">	<span class="comment">/* adjust end */</span></span><br><span class="line">	arch_os_mutex_put(&amp;(uart-&gt;read_mutex));</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> n_read;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接收多个字节</span></span><br><span class="line"><span class="keyword">int</span> _Xmodem_recv_str(<span class="keyword">miio_uart_t</span> *uart, <span class="keyword">uint8_t</span>* buf, <span class="keyword">uint32_t</span> timeout_ms)</span><br><span class="line">&#123;</span><br><span class="line">        <span class="comment">/* the following is an example for linux platform */</span></span><br><span class="line">        <span class="comment">/* user should adjust below for each mcu platform */</span></span><br><span class="line">        <span class="comment">/* adjust start */</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">termios</span> <span class="title">opt</span>;</span>     <span class="comment">/* set uart timeout */</span></span><br><span class="line">        tcgetattr(uart-&gt;fd, &amp;opt);</span><br><span class="line">        opt.c_cc[VTIME] = timeout_ms / <span class="number">100</span>;<span class="comment">// / 100;</span></span><br><span class="line">        tcsetattr(uart-&gt;fd, TCSADRAIN, &amp;opt);</span><br><span class="line">        <span class="comment">/* adjust end */</span></span><br><span class="line">        arch_os_mutex_get(&amp;(uart-&gt;read_mutex));</span><br><span class="line">        <span class="comment">/* adjust start */</span></span><br><span class="line">        <span class="keyword">int</span> n_read = <span class="built_in">read</span>(uart-&gt;fd, buf, USER_UART_RXBUF_SIZE);</span><br><span class="line">        buf[n_read] = <span class="string">'\0'</span>;</span><br><span class="line">        <span class="comment">/* adjust end */</span></span><br><span class="line">        arch_os_mutex_put(&amp;(uart-&gt;read_mutex));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> n_read;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
   </entry>
   <entry>
@@ -90,100 +67,6 @@
 <a id="more"></a>
 <h3 id="一、性质"><a href="#一、性质" class="headerlink" title="一、性质"></a>一、性质</h3><p><strong>RB-Tree是一棵二叉查找树，红黑树的性质：</strong></p>
 <p>(1)每个节点或是红色的,或是黑色的.<br>(2)根节点是黑色的.<br>(3)每个叶节点（NULL）是黑色的.<br>(4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.<br>(5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.</p>
-]]></content>
-  </entry>
-  <entry>
-    <title>esp32c3基于lvgl的图像显示</title>
-    <url>/2023/11/20/esp32c3%E5%9F%BA%E4%BA%8Elvgl%E7%9A%84%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA/</url>
-    <content><![CDATA[<h2 id="esp32c3基于lvgl的图像显示"><a href="#esp32c3基于lvgl的图像显示" class="headerlink" title="esp32c3基于lvgl的图像显示"></a>esp32c3基于lvgl的图像显示</h2><a id="more"></a>
-<p>软件环境：</p>
-<p>Vscode、ESP_IDF</p>
-<p>硬件环境：</p>
-<p>ESP32C3、GC9A01</p>
-<p><strong>基于spi_lcd_touch示例项目工程开发</strong></p>
-<p>配置menuconfig——-&gt; Example Configuration——-&gt; LCD controller model (GC9A01)</p>
-<p>使用<a href="https://www.iloveimg.com/zh-cn/resize-image#resize-options,pixels" target="_blank" rel="noopener">调整图像大小</a>工具，调整图像高度和宽度。</p>
-<p>使用LVGL 提供的 Online Image Converter  工具，将图片转换成数组。</p>
-<img src="/2023/11/20/esp32c3%E5%9F%BA%E4%BA%8Elvgl%E7%9A%84%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA/image-20231120113626535.png" class="" title="image-20231120113626535">
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">LV_IMG_DECLARE(saber_1);</span><br><span class="line"></span><br><span class="line"><span class="keyword">lv_obj_t</span> *img1 = lv_img_create(lv_scr_act());</span><br><span class="line">lv_img_set_src(img1, &amp;saber_1);</span><br><span class="line">lv_obj_align(img1, LV_ALIGN_CENTER, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">lv_obj_set_size(img1, <span class="number">240</span>, <span class="number">240</span>);</span><br></pre></td></tr></table></figure>
-<p>图像显示效果</p>
-<img src="/2023/11/20/esp32c3%E5%9F%BA%E4%BA%8Elvgl%E7%9A%84%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA/image-20231120113638813.png" class="" title="image-20231120113638813">
-<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://docs.lvgl.io/8.3/libs/sjpg.html#example" target="_blank" rel="noopener">LVGL 文档</a></p>
-<p><a href="https://www.iloveimg.com/zh-cn/resize-image#resize-options,pixels" target="_blank" rel="noopener">调整图像大小</a></p>
-<p><a href="https://lvgl.io/tools/imageconverter" target="_blank" rel="noopener">Convert BMP, JPG, PNG, or SVG to C array or binary to use them in LVGL</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2020/03/12/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<a id="more"></a>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-<h3 id="Delete-staic-files"><a href="#Delete-staic-files" class="headerlink" title="Delete staic files"></a>Delete staic files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1.删除 .deploy文件夹</span></span><br><span class="line"><span class="comment"># 2.hexo g</span></span><br></pre></td></tr></table></figure>
-<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://hexo.course.90byte.com/" target="_blank" rel="noopener">hexo 相关配置</a><br><a href="https://zhuanlan.zhihu.com/p/363300921" target="_blank" rel="noopener">Hexo日历插件</a><br><a href="https://www.cnblogs.com/chloneda/p/hexo.html" target="_blank" rel="noopener">Github+Hexo一站式部署个人博客</a><br><a href="https://www.cnblogs.com/mmzs/p/10385822.html" target="_blank" rel="noopener">hexo 添加站点地图</a></p>
-]]></content>
-      <categories>
-        <category>hexo</category>
-      </categories>
-      <tags>
-        <tag>hexo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>linux 线程笔记</title>
-    <url>/2020/03/11/linux-%E7%BA%BF%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<p>linux 线程笔记</p>
-<a id="more"></a>
-<p><strong>Linux C++程序占用cpu</strong></p>
-<ol>
-<li>查看程序的进程号</li>
-</ol>
-<p>top -c , 输入<code>大写P</code>，top的输出会按使用cpu多少排序</p>
-<p>​    2. 查看耗CPU的线程号</p>
-<p>命令：<code>top -Hp 进程号</code>。 同样输入<code>大写P</code>，top的输出会按使用cpu多少排序。</p>
-<p>输入<code>top -Hp 4918</code></p>
-<ol>
-<li>查看耗CPU的任务</li>
-</ol>
-<p><code>pstack 进程号</code>，会输出所有线程的堆栈信息</p>
-<p><a href="https://blog.csdn.net/test1280/article/details/87974748" target="_blank" rel="noopener">Linux：获取线程的PID（TID、LWP）的几种方式</a></p>
-<h3 id="gdb-调试多线程程序"><a href="#gdb-调试多线程程序" class="headerlink" title="gdb 调试多线程程序"></a>gdb 调试多线程程序</h3><p><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/gdb.html" target="_blank" rel="noopener">gdb调试利器</a></p>
-<ul>
-<li>info threads: 显示当前可调试的所有线程</li>
-<li>thread ID: 调试目标ID指定的线程</li>
-<li>set scheduler-locking [off|on|step]</li>
-</ul>
-<h3 id="多线程环境"><a href="#多线程环境" class="headerlink" title="多线程环境"></a>多线程环境</h3><ul>
-<li><p><strong>可重入函数</strong></p>
-<p>如果一个函数能被多个线程同时调用且不发生竞态条件，则称它是线程安全的，或说它是可冲入函数。</p>
-</li>
-</ul>
-<h2 id="什么时候使用Pimpl技术"><a href="#什么时候使用Pimpl技术" class="headerlink" title="什么时候使用Pimpl技术?"></a>什么时候使用Pimpl技术?</h2><p>可以看到Pimpl拥有如下优点：</p>
-<ul>
-<li><strong>减少依赖项（降低耦合性）：其一减少原类不必要的头文件的依赖，加速编译；其二对Impl类进行修改，无需重新编译原类。</strong></li>
-<li><strong>接口和实现的分离（隐藏了类的实现）：私有成员完全可以隐藏在共有接口之外，给用户一个间接明了的使用接口，尤其适合闭源API设计。</strong></li>
-<li><strong>可使用惰性分配技术：类的某部分实现可以写成按需分配或者实际使用时再分配，从而节省资源。</strong></li>
-</ul>
-<p>Pimpl也拥有一些缺点：</p>
-<ul>
-<li><strong>每个类需要占用小小额外的指针内存。</strong></li>
-<li><strong>每个类每次访问具体实现时都要多一个间接指针操作的开销</strong>，并且再使用、阅读和调试上都可能有所不便。</li>
-</ul>
-<p>可以说，在性能/内存要求不敏感（非极端底层）的领域，Pimpl技术可以有相当不错的发挥和作用。</p>
-<h3 id="可变参数模板"><a href="#可变参数模板" class="headerlink" title="可变参数模板"></a><a href="https://zh.wikipedia.org/wiki/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E6%A8%A1%E6%9D%BF" target="_blank" rel="noopener">可变参数模板</a></h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 例如，STL的类模板tuple可以有任意个数的类型名（typename）作为它的模板形参（template parameter）</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Values&gt; <span class="class"><span class="keyword">class</span> <span class="title">tuple</span>;</span></span><br></pre></td></tr></table></figure>
-<h3 id="现代C-特性——std-optional"><a href="#现代C-特性——std-optional" class="headerlink" title="现代C++特性——std::optional"></a><a href="https://www.jianshu.com/p/24b4361017f9" target="_blank" rel="noopener">现代C++特性——std::optional</a></h3><h3 id="std-future"><a href="#std-future" class="headerlink" title="std::future"></a><a href="https://www.cnblogs.com/haippy/p/3280643.html" target="_blank" rel="noopener">std::future</a></h3><p>可以用来获取异步任务的结果，可以把它当成一种简单的线程间同步的手段。</p>
-<h3 id="std-chrono"><a href="#std-chrono" class="headerlink" title="std::chrono"></a><a href="">std::chrono</a></h3><p>一个time library, chrono是一个模版库，使用简单，功能强大，只需要理解三个概念：duration、time_point、clock。</p>
-<h3 id="Linux-线程函数"><a href="#Linux-线程函数" class="headerlink" title="Linux 线程函数"></a>Linux 线程函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">// 设置线程的唯一名称，长度限制16个字符</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setname_np</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_getname_np</span><span class="params">(<span class="keyword">pthread_t</span> thread,</span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">char</span> *name, <span class="keyword">size_t</span> len)</span></span>;</span><br></pre></td></tr></table></figure>
-<h3 id="c-线程类std-thread"><a href="#c-线程类std-thread" class="headerlink" title="c++ 线程类std::thread"></a>c++ 线程类std::thread</h3><h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p>《Linux系统编程》</p>
-<p>《Linux高性能服务器编程》</p>
-<p><a href="https://www.onitroad.com/jc/linux/man-pages/linux/man3/pthread_setname_np.3.html" target="_blank" rel="noopener">Linux程序员手册</a></p>
 ]]></content>
   </entry>
   <entry>
@@ -477,9 +360,126 @@
 </div>
 ]]></content>
       <tags>
-        <tag>hexo</tag>
         <tag>博客           //多个标签可以这样添加</tag>
+        <tag>hexo</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>下载Zlib</title>
+    <url>/2020/03/11/Zlib%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E4%BD%BF%E7%94%A8C++/</url>
+    <content><![CDATA[<p>下载Zlib</p>
+<a id="more"></a>
+<p><strong>1.下载Zlib</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget  http:&#x2F;&#x2F;www.zlib.net&#x2F;zlib-1.2.12.tar.gz</span><br></pre></td></tr></table></figure>
+<p><strong>2.解压安装包</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar -zxvf zlib-1.2.12.tar.gz</span><br></pre></td></tr></table></figure>
+<p><strong>3.配置编译程序存放路径</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure --prefix&#x3D;&#x2F;home&#x2F;saber&#x2F;Downloads&#x2F;zlib_build&#x2F;</span><br></pre></td></tr></table></figure>
+<p><strong>4. 修改链接库,配置交叉编译工具</strong></p>
+
+<p><strong>5.安装</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo make &amp; make install</span><br></pre></td></tr></table></figure>
+<p><strong>6.检查编译结果</strong></p>
+
+<p><strong>二、下载安装UnZip</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget https:&#x2F;&#x2F;sourceforge.net&#x2F;projects&#x2F;infozip&#x2F;files&#x2F;UnZip%206.x%20%28latest%29&#x2F;UnZip%206.0&#x2F;unzip60.tar.gz</span><br></pre></td></tr></table></figure>
+<p>安装</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;unix&#x2F;configure</span><br><span class="line">cp .&#x2F;unix&#x2F;Makefile .</span><br><span class="line">make</span><br><span class="line">make generic</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>esp32c3基于lvgl的图像显示</title>
+    <url>/2023/11/20/esp32c3%E5%9F%BA%E4%BA%8Elvgl%E7%9A%84%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA/</url>
+    <content><![CDATA[<h2 id="esp32c3基于lvgl的图像显示"><a href="#esp32c3基于lvgl的图像显示" class="headerlink" title="esp32c3基于lvgl的图像显示"></a>esp32c3基于lvgl的图像显示</h2><a id="more"></a>
+<p>软件环境：</p>
+<p>Vscode、ESP_IDF</p>
+<p>硬件环境：</p>
+<p>ESP32C3、GC9A01</p>
+<p><strong>基于spi_lcd_touch示例项目工程开发</strong></p>
+<p>配置menuconfig——-&gt; Example Configuration——-&gt; LCD controller model (GC9A01)</p>
+<p>使用<a href="https://www.iloveimg.com/zh-cn/resize-image#resize-options,pixels" target="_blank" rel="noopener">调整图像大小</a>工具，调整图像高度和宽度。</p>
+<p>使用LVGL 提供的 Online Image Converter  工具，将图片转换成数组。</p>
+<img src="/2023/11/20/esp32c3%E5%9F%BA%E4%BA%8Elvgl%E7%9A%84%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA/image-20231120113626535.png" class="" title="image-20231120113626535">
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">LV_IMG_DECLARE(saber_1);</span><br><span class="line"></span><br><span class="line"><span class="keyword">lv_obj_t</span> *img1 = lv_img_create(lv_scr_act());</span><br><span class="line">lv_img_set_src(img1, &amp;saber_1);</span><br><span class="line">lv_obj_align(img1, LV_ALIGN_CENTER, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">lv_obj_set_size(img1, <span class="number">240</span>, <span class="number">240</span>);</span><br></pre></td></tr></table></figure>
+<p>图像显示效果</p>
+<img src="/2023/11/20/esp32c3%E5%9F%BA%E4%BA%8Elvgl%E7%9A%84%E5%9B%BE%E5%83%8F%E6%98%BE%E7%A4%BA/image-20231120113638813.png" class="" title="image-20231120113638813">
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://docs.lvgl.io/8.3/libs/sjpg.html#example" target="_blank" rel="noopener">LVGL 文档</a></p>
+<p><a href="https://www.iloveimg.com/zh-cn/resize-image#resize-options,pixels" target="_blank" rel="noopener">调整图像大小</a></p>
+<p><a href="https://lvgl.io/tools/imageconverter" target="_blank" rel="noopener">Convert BMP, JPG, PNG, or SVG to C array or binary to use them in LVGL</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2020/03/12/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<a id="more"></a>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+<h3 id="Delete-staic-files"><a href="#Delete-staic-files" class="headerlink" title="Delete staic files"></a>Delete staic files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1.删除 .deploy文件夹</span></span><br><span class="line"><span class="comment"># 2.hexo g</span></span><br></pre></td></tr></table></figure>
+<h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><p><a href="https://hexo.course.90byte.com/" target="_blank" rel="noopener">hexo 相关配置</a><br><a href="https://zhuanlan.zhihu.com/p/363300921" target="_blank" rel="noopener">Hexo日历插件</a><br><a href="https://www.cnblogs.com/chloneda/p/hexo.html" target="_blank" rel="noopener">Github+Hexo一站式部署个人博客</a><br><a href="https://www.cnblogs.com/mmzs/p/10385822.html" target="_blank" rel="noopener">hexo 添加站点地图</a></p>
+]]></content>
+      <categories>
+        <category>hexo</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>linux 线程笔记</title>
+    <url>/2020/03/11/linux-%E7%BA%BF%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>linux 线程笔记</p>
+<a id="more"></a>
+<p><strong>Linux C++程序占用cpu</strong></p>
+<ol>
+<li>查看程序的进程号</li>
+</ol>
+<p>top -c , 输入<code>大写P</code>，top的输出会按使用cpu多少排序</p>
+<p>​    2. 查看耗CPU的线程号</p>
+<p>命令：<code>top -Hp 进程号</code>。 同样输入<code>大写P</code>，top的输出会按使用cpu多少排序。</p>
+<p>输入<code>top -Hp 4918</code></p>
+<ol>
+<li>查看耗CPU的任务</li>
+</ol>
+<p><code>pstack 进程号</code>，会输出所有线程的堆栈信息</p>
+<p><a href="https://blog.csdn.net/test1280/article/details/87974748" target="_blank" rel="noopener">Linux：获取线程的PID（TID、LWP）的几种方式</a></p>
+<h3 id="gdb-调试多线程程序"><a href="#gdb-调试多线程程序" class="headerlink" title="gdb 调试多线程程序"></a>gdb 调试多线程程序</h3><p><a href="https://linuxtools-rst.readthedocs.io/zh_CN/latest/tool/gdb.html" target="_blank" rel="noopener">gdb调试利器</a></p>
+<ul>
+<li>info threads: 显示当前可调试的所有线程</li>
+<li>thread ID: 调试目标ID指定的线程</li>
+<li>set scheduler-locking [off|on|step]</li>
+</ul>
+<h3 id="多线程环境"><a href="#多线程环境" class="headerlink" title="多线程环境"></a>多线程环境</h3><ul>
+<li><p><strong>可重入函数</strong></p>
+<p>如果一个函数能被多个线程同时调用且不发生竞态条件，则称它是线程安全的，或说它是可冲入函数。</p>
+</li>
+</ul>
+<h2 id="什么时候使用Pimpl技术"><a href="#什么时候使用Pimpl技术" class="headerlink" title="什么时候使用Pimpl技术?"></a>什么时候使用Pimpl技术?</h2><p>可以看到Pimpl拥有如下优点：</p>
+<ul>
+<li><strong>减少依赖项（降低耦合性）：其一减少原类不必要的头文件的依赖，加速编译；其二对Impl类进行修改，无需重新编译原类。</strong></li>
+<li><strong>接口和实现的分离（隐藏了类的实现）：私有成员完全可以隐藏在共有接口之外，给用户一个间接明了的使用接口，尤其适合闭源API设计。</strong></li>
+<li><strong>可使用惰性分配技术：类的某部分实现可以写成按需分配或者实际使用时再分配，从而节省资源。</strong></li>
+</ul>
+<p>Pimpl也拥有一些缺点：</p>
+<ul>
+<li><strong>每个类需要占用小小额外的指针内存。</strong></li>
+<li><strong>每个类每次访问具体实现时都要多一个间接指针操作的开销</strong>，并且再使用、阅读和调试上都可能有所不便。</li>
+</ul>
+<p>可以说，在性能/内存要求不敏感（非极端底层）的领域，Pimpl技术可以有相当不错的发挥和作用。</p>
+<h3 id="可变参数模板"><a href="#可变参数模板" class="headerlink" title="可变参数模板"></a><a href="https://zh.wikipedia.org/wiki/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E6%A8%A1%E6%9D%BF" target="_blank" rel="noopener">可变参数模板</a></h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 例如，STL的类模板tuple可以有任意个数的类型名（typename）作为它的模板形参（template parameter）</span></span><br><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Values&gt; <span class="class"><span class="keyword">class</span> <span class="title">tuple</span>;</span></span><br></pre></td></tr></table></figure>
+<h3 id="现代C-特性——std-optional"><a href="#现代C-特性——std-optional" class="headerlink" title="现代C++特性——std::optional"></a><a href="https://www.jianshu.com/p/24b4361017f9" target="_blank" rel="noopener">现代C++特性——std::optional</a></h3><h3 id="std-future"><a href="#std-future" class="headerlink" title="std::future"></a><a href="https://www.cnblogs.com/haippy/p/3280643.html" target="_blank" rel="noopener">std::future</a></h3><p>可以用来获取异步任务的结果，可以把它当成一种简单的线程间同步的手段。</p>
+<h3 id="std-chrono"><a href="#std-chrono" class="headerlink" title="std::chrono"></a><a href="">std::chrono</a></h3><p>一个time library, chrono是一个模版库，使用简单，功能强大，只需要理解三个概念：duration、time_point、clock。</p>
+<h3 id="Linux-线程函数"><a href="#Linux-线程函数" class="headerlink" title="Linux 线程函数"></a>Linux 线程函数</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;pthread.h&gt;</span></span></span><br><span class="line"><span class="comment">// 设置线程的唯一名称，长度限制16个字符</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_setname_np</span><span class="params">(<span class="keyword">pthread_t</span> thread, <span class="keyword">const</span> <span class="keyword">char</span> *name)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_getname_np</span><span class="params">(<span class="keyword">pthread_t</span> thread,</span></span></span><br><span class="line"><span class="function"><span class="params">                       <span class="keyword">char</span> *name, <span class="keyword">size_t</span> len)</span></span>;</span><br></pre></td></tr></table></figure>
+<h3 id="c-线程类std-thread"><a href="#c-线程类std-thread" class="headerlink" title="c++ 线程类std::thread"></a>c++ 线程类std::thread</h3><h3 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h3><p>《Linux系统编程》</p>
+<p>《Linux高性能服务器编程》</p>
+<p><a href="https://www.onitroad.com/jc/linux/man-pages/linux/man3/pthread_setname_np.3.html" target="_blank" rel="noopener">Linux程序员手册</a></p>
+]]></content>
   </entry>
   <entry>
     <title>linux 网络编程笔记</title>
@@ -520,6 +520,13 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">APPLICATION USAGE</span><br><span class="line">       If connect() fails, the state of  the  socket  is  unspecified. Conforming  applications</span><br><span class="line">       should close the file descriptor and create a new socket before attempting to reconnect.</span><br></pre></td></tr></table></figure>
 <h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a><strong>参考文档</strong></h1><p><a href="[(62条消息">TCP传输的单个报文最大字节（MSS和MTU）</a> TCP传输的单个报文最大字节（MSS和MTU）_luck_horse的博客-CSDN博客_tcp最大发送字节](<a href="https://blog.csdn.net/qinrenzhi/article/details/85340048" target="_blank" rel="noopener">https://blog.csdn.net/qinrenzhi/article/details/85340048</a>))</p>
 <p><a href="https://www.cnblogs.com/songyuchen/p/14038180.html" target="_blank" rel="noopener"><a href="https://www.cnblogs.com/songyuchen/p/14038180.html" target="_blank" rel="noopener">关于c++中sleep_for函数的总结分析</a></a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>paho.mqtt.c 源码阅读</title>
+    <url>/2022/04/08/paho.mqtt.c%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</url>
+    <content><![CDATA[<p>paho.mqtt.c 源码阅读</p>
+<a id="more"></a>
 ]]></content>
   </entry>
   <entry>
@@ -619,31 +626,11 @@
 ]]></content>
   </entry>
   <entry>
-    <title>paho.mqtt.c 源码阅读</title>
-    <url>/2022/04/08/paho.mqtt.c%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</url>
-    <content><![CDATA[<p>paho.mqtt.c 源码阅读</p>
-<a id="more"></a>
-]]></content>
-  </entry>
-  <entry>
     <title>树莓派安装OpenSSL</title>
     <url>/2020/03/12/%E6%A0%91%E8%8E%93%E6%B4%BE%E5%AE%89%E8%A3%85openssl/</url>
     <content><![CDATA[<p>树莓派安装OpenSSL</p>
 <a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget  --no-check-certificate  https:&#x2F;&#x2F;www.openssl.org&#x2F;source&#x2F;openssl-1.1.1d.tar.gz</span><br><span class="line">tar zxf openssl-1.1.1d.tar.gz</span><br><span class="line">cd openssl-1.1.1d</span><br><span class="line">.&#x2F;config --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;openssl --openssldir&#x3D;&#x2F;usr&#x2F;local&#x2F;openssl </span><br><span class="line">make -j4 &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
-    <title>系统构建</title>
-    <url>/2020/03/12/%E7%B3%BB%E7%BB%9F%E6%9E%84%E5%BB%BA%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<p>系统构建相关知识点</p>
-<a id="more"></a>
-<ol>
-<li>创建时间子系统</li>
-<li>创建内存分配子系统(空间)</li>
-<li>创建定时器子系统</li>
-<li>业务子系统</li>
-</ol>
 ]]></content>
   </entry>
   <entry>
@@ -679,5 +666,18 @@ t_k中只有正确解标签的索引为1，其他均为0(one-hot表示)，</scri
       <categories>
         <category>DeepLearning</category>
       </categories>
+  </entry>
+  <entry>
+    <title>系统构建</title>
+    <url>/2020/03/12/%E7%B3%BB%E7%BB%9F%E6%9E%84%E5%BB%BA%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>系统构建相关知识点</p>
+<a id="more"></a>
+<ol>
+<li>创建时间子系统</li>
+<li>创建内存分配子系统(空间)</li>
+<li>创建定时器子系统</li>
+<li>业务子系统</li>
+</ol>
+]]></content>
   </entry>
 </search>
