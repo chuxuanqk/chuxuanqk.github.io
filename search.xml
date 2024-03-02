@@ -51,15 +51,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>RB-Tree</title>
-    <url>/2020/03/11/RB-Tree/</url>
-    <content><![CDATA[<p>RB-Tree</p>
-<a id="more"></a>
-<h3 id="一、性质"><a href="#一、性质" class="headerlink" title="一、性质"></a>一、性质</h3><p><strong>RB-Tree是一棵二叉查找树，红黑树的性质：</strong></p>
-<p>(1)每个节点或是红色的,或是黑色的.<br>(2)根节点是黑色的.<br>(3)每个叶节点（NULL）是黑色的.<br>(4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.<br>(5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.</p>
-]]></content>
-  </entry>
-  <entry>
     <title>CMake 笔记</title>
     <url>/2020/03/12/CMake_%E7%AC%94%E8%AE%B0/</url>
     <content><![CDATA[<p>CMake 笔记</p>
@@ -67,6 +58,15 @@
 <p><a href="https://github.com/fenneishi/cmake" target="_blank" rel="noopener">CMake_资料1</a></p>
 <p>example:</p>
 <figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="comment"># cmake版本要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目信息</span></span><br><span class="line"><span class="keyword">project</span>(DummyImport CXX)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定为C++11 版本</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加头文件目录</span></span><br><span class="line"><span class="keyword">include_directories</span>(../../single_include)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定生成目标</span></span><br><span class="line"><span class="keyword">add_executable</span>(create_json main.cpp)</span><br></pre></td></tr></table></figure>
+]]></content>
+  </entry>
+  <entry>
+    <title>RB-Tree</title>
+    <url>/2020/03/11/RB-Tree/</url>
+    <content><![CDATA[<p>RB-Tree</p>
+<a id="more"></a>
+<h3 id="一、性质"><a href="#一、性质" class="headerlink" title="一、性质"></a>一、性质</h3><p><strong>RB-Tree是一棵二叉查找树，红黑树的性质：</strong></p>
+<p>(1)每个节点或是红色的,或是黑色的.<br>(2)根节点是黑色的.<br>(3)每个叶节点（NULL）是黑色的.<br>(4)如果一个节点是红色的，则它的两个孩子节点都是黑色的.<br>(5)对每个节点，从该节点到其所有后代叶节点的简单路径上，均包含相同数目的黑色节点.</p>
 ]]></content>
   </entry>
   <entry>
@@ -482,6 +482,47 @@
 ]]></content>
   </entry>
   <entry>
+    <title>linux 网络编程笔记</title>
+    <url>/2022/04/02/linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
+    <content><![CDATA[<p>linux 网络编程相关知识点</p>
+<a id="more"></a>
+<p>[toc]</p>
+<p><strong>linux 默认MTU: 1500字节</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">saber@saber-VirtualBox:~$ cat &#x2F;sys&#x2F;class&#x2F;net&#x2F;enp0s3&#x2F;mtu </span><br><span class="line">1500</span><br></pre></td></tr></table></figure>
+<p><strong>MSS决定TCP的单包传输量</strong></p>
+<p>往往用MTU值代替（需要减去IP数据包包头的大小20Bytes和TCP数据段的包头20Bytes）所以往往MSS为1460</p>
+<p>MSS为1460是由1500-20（IP头）-20（TCP头）计算出的。<br>实际场景下，TCP包头中会带有12字节的选项——时间戳。<br>这样，单个TCP包实际传输的最大量就缩减为1448字节。1448=1500-20（IP头）-32（20字节TCP头和12字节TCP选项时间戳）</p>
+<h1 id="HTTP中Get与Post的区别"><a href="#HTTP中Get与Post的区别" class="headerlink" title="HTTP中Get与Post的区别"></a><strong>HTTP中Get与Post的区别</strong></h1><p>GET方式提交的数据最多只能是1024字节”，因为GET是通过URL提交数据，那么GET可提交的数据量就跟URL的长度有直接关系 了。</p>
+<p>POST数据是没有限制的，起限制作用的是服务器的处理程序的处理能力</p>
+<p><strong>linux动态查看文件</strong></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tail -f -n 10 /tmp/log/Onecm_Gateway.log</span><br></pre></td></tr></table></figure>
+<h1 id="TCP网络编程"><a href="#TCP网络编程" class="headerlink" title="TCP网络编程"></a>TCP网络编程</h1><ul>
+<li>select 定时器</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">timeval tv;</span><br><span class="line">tv.tv_sec = <span class="number">1</span>;</span><br><span class="line">tv.tv_usec = <span class="number">0</span>;</span><br><span class="line">select(<span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, &amp;tv);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>select 判断文件描述符 可读、可写</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_writeable</span><span class="params">(<span class="keyword">int</span> socket)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    fd_set fds;</span><br><span class="line">    FD_ZERO(&amp;fds);</span><br><span class="line">    FD_SET(socket, &amp;fds);</span><br><span class="line"></span><br><span class="line">    timeval tv;</span><br><span class="line">    tv.tv_sec = <span class="number">3</span>;</span><br><span class="line">    tv.tv_usec = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> select(socket + <span class="number">1</span>, <span class="literal">NULL</span>, &amp;fds, <span class="literal">NULL</span>, &amp;tv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> _select_read(<span class="keyword">int</span> sock, <span class="keyword">time_t</span> sec, <span class="keyword">time_t</span> usec)</span><br><span class="line">&#123;</span><br><span class="line">    fd_set fds;</span><br><span class="line">    FD_ZERO(&amp;fds);</span><br><span class="line">    FD_SET(sock, &amp;fds);</span><br><span class="line"></span><br><span class="line">    timeval tv;</span><br><span class="line">    tv.tv_sec = <span class="keyword">static_cast</span>&lt;<span class="keyword">long</span>&gt;(sec);</span><br><span class="line">    tv.tv_usec = <span class="keyword">static_cast</span>&lt;<span class="keyword">decltype</span>(tv.tv_usec)&gt;(usec);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> handle_EINTR([&amp;]()</span><br><span class="line">                        &#123; <span class="keyword">return</span> select(<span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(sock + <span class="number">1</span>), &amp;fds, <span class="literal">nullptr</span>, <span class="literal">nullptr</span>, &amp;tv); &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>select 判断tcp client 是否还连接，重连操作</li>
+</ul>
+<p><strong>usleep() 有有很大的问题</strong></p>
+<ol>
+<li>在一些平台下不是线程安全，如HP-UX以及Linux</li>
+<li><em>usleep()</em> 会影响信号</li>
+<li>在很多平台，如HP-UX以及某些Linux下，当参数的值必须小于1 <em> 1000 </em> 1000也就是1秒，否则该函数会报错，并且立即返回。</li>
+<li>大部分平台的帮助文档已经明确说了，该函数是已经被舍弃的函数。</li>
+</ol>
+<p>还好，POSIX规范中有一个很好用的函数，<em>nanosleep()</em> ，该函数没有<em>usleep()</em> 的这些缺点，它的精度是纳秒级。在Solaris的多线程环境下编译器会自动把<em>usleep()</em> 连接成<em>nanosleep()</em> 。</p>
+<p>Linux下短延时推荐使用select函数.</p>
+<p><strong>1 .connect调用失败后需关闭描述符</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">APPLICATION USAGE</span><br><span class="line">       If connect() fails, the state of  the  socket  is  unspecified. Conforming  applications</span><br><span class="line">       should close the file descriptor and create a new socket before attempting to reconnect.</span><br></pre></td></tr></table></figure>
+<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a><strong>参考文档</strong></h1><p><a href="[(62条消息">TCP传输的单个报文最大字节（MSS和MTU）</a> TCP传输的单个报文最大字节（MSS和MTU）_luck_horse的博客-CSDN博客_tcp最大发送字节](<a href="https://blog.csdn.net/qinrenzhi/article/details/85340048" target="_blank" rel="noopener">https://blog.csdn.net/qinrenzhi/article/details/85340048</a>))</p>
+<p><a href="https://www.cnblogs.com/songyuchen/p/14038180.html" target="_blank" rel="noopener"><a href="https://www.cnblogs.com/songyuchen/p/14038180.html" target="_blank" rel="noopener">关于c++中sleep_for函数的总结分析</a></a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>paho.mqtt.c 源码阅读</title>
     <url>/2022/04/08/paho.mqtt.c%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</url>
     <content><![CDATA[<p>paho.mqtt.c 源码阅读</p>
@@ -590,47 +631,6 @@
     <content><![CDATA[<p>树莓派安装OpenSSL</p>
 <a id="more"></a>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">wget  --no-check-certificate  https:&#x2F;&#x2F;www.openssl.org&#x2F;source&#x2F;openssl-1.1.1d.tar.gz</span><br><span class="line">tar zxf openssl-1.1.1d.tar.gz</span><br><span class="line">cd openssl-1.1.1d</span><br><span class="line">.&#x2F;config --prefix&#x3D;&#x2F;usr&#x2F;local&#x2F;openssl --openssldir&#x3D;&#x2F;usr&#x2F;local&#x2F;openssl </span><br><span class="line">make -j4 &amp;&amp; make install</span><br></pre></td></tr></table></figure>
-]]></content>
-  </entry>
-  <entry>
-    <title>linux 网络编程笔记</title>
-    <url>/2022/04/02/linux%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E7%AC%94%E8%AE%B0/</url>
-    <content><![CDATA[<p>linux 网络编程相关知识点</p>
-<a id="more"></a>
-<p>[toc]</p>
-<p><strong>linux 默认MTU: 1500字节</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">saber@saber-VirtualBox:~$ cat &#x2F;sys&#x2F;class&#x2F;net&#x2F;enp0s3&#x2F;mtu </span><br><span class="line">1500</span><br></pre></td></tr></table></figure>
-<p><strong>MSS决定TCP的单包传输量</strong></p>
-<p>往往用MTU值代替（需要减去IP数据包包头的大小20Bytes和TCP数据段的包头20Bytes）所以往往MSS为1460</p>
-<p>MSS为1460是由1500-20（IP头）-20（TCP头）计算出的。<br>实际场景下，TCP包头中会带有12字节的选项——时间戳。<br>这样，单个TCP包实际传输的最大量就缩减为1448字节。1448=1500-20（IP头）-32（20字节TCP头和12字节TCP选项时间戳）</p>
-<h1 id="HTTP中Get与Post的区别"><a href="#HTTP中Get与Post的区别" class="headerlink" title="HTTP中Get与Post的区别"></a><strong>HTTP中Get与Post的区别</strong></h1><p>GET方式提交的数据最多只能是1024字节”，因为GET是通过URL提交数据，那么GET可提交的数据量就跟URL的长度有直接关系 了。</p>
-<p>POST数据是没有限制的，起限制作用的是服务器的处理程序的处理能力</p>
-<p><strong>linux动态查看文件</strong></p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">tail -f -n 10 /tmp/log/Onecm_Gateway.log</span><br></pre></td></tr></table></figure>
-<h1 id="TCP网络编程"><a href="#TCP网络编程" class="headerlink" title="TCP网络编程"></a>TCP网络编程</h1><ul>
-<li>select 定时器</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line">timeval tv;</span><br><span class="line">tv.tv_sec = <span class="number">1</span>;</span><br><span class="line">tv.tv_usec = <span class="number">0</span>;</span><br><span class="line">select(<span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, &amp;tv);</span><br></pre></td></tr></table></figure>
-<ul>
-<li>select 判断文件描述符 可读、可写</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_writeable</span><span class="params">(<span class="keyword">int</span> socket)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    fd_set fds;</span><br><span class="line">    FD_ZERO(&amp;fds);</span><br><span class="line">    FD_SET(socket, &amp;fds);</span><br><span class="line"></span><br><span class="line">    timeval tv;</span><br><span class="line">    tv.tv_sec = <span class="number">3</span>;</span><br><span class="line">    tv.tv_usec = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> buf[<span class="number">1024</span>] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> select(socket + <span class="number">1</span>, <span class="literal">NULL</span>, &amp;fds, <span class="literal">NULL</span>, &amp;tv);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> _select_read(<span class="keyword">int</span> sock, <span class="keyword">time_t</span> sec, <span class="keyword">time_t</span> usec)</span><br><span class="line">&#123;</span><br><span class="line">    fd_set fds;</span><br><span class="line">    FD_ZERO(&amp;fds);</span><br><span class="line">    FD_SET(sock, &amp;fds);</span><br><span class="line"></span><br><span class="line">    timeval tv;</span><br><span class="line">    tv.tv_sec = <span class="keyword">static_cast</span>&lt;<span class="keyword">long</span>&gt;(sec);</span><br><span class="line">    tv.tv_usec = <span class="keyword">static_cast</span>&lt;<span class="keyword">decltype</span>(tv.tv_usec)&gt;(usec);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> handle_EINTR([&amp;]()</span><br><span class="line">                        &#123; <span class="keyword">return</span> select(<span class="keyword">static_cast</span>&lt;<span class="keyword">int</span>&gt;(sock + <span class="number">1</span>), &amp;fds, <span class="literal">nullptr</span>, <span class="literal">nullptr</span>, &amp;tv); &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>select 判断tcp client 是否还连接，重连操作</li>
-</ul>
-<p><strong>usleep() 有有很大的问题</strong></p>
-<ol>
-<li>在一些平台下不是线程安全，如HP-UX以及Linux</li>
-<li><em>usleep()</em> 会影响信号</li>
-<li>在很多平台，如HP-UX以及某些Linux下，当参数的值必须小于1 <em> 1000 </em> 1000也就是1秒，否则该函数会报错，并且立即返回。</li>
-<li>大部分平台的帮助文档已经明确说了，该函数是已经被舍弃的函数。</li>
-</ol>
-<p>还好，POSIX规范中有一个很好用的函数，<em>nanosleep()</em> ，该函数没有<em>usleep()</em> 的这些缺点，它的精度是纳秒级。在Solaris的多线程环境下编译器会自动把<em>usleep()</em> 连接成<em>nanosleep()</em> 。</p>
-<p>Linux下短延时推荐使用select函数.</p>
-<p><strong>1 .connect调用失败后需关闭描述符</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">APPLICATION USAGE</span><br><span class="line">       If connect() fails, the state of  the  socket  is  unspecified. Conforming  applications</span><br><span class="line">       should close the file descriptor and create a new socket before attempting to reconnect.</span><br></pre></td></tr></table></figure>
-<h1 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a><strong>参考文档</strong></h1><p><a href="[(62条消息">TCP传输的单个报文最大字节（MSS和MTU）</a> TCP传输的单个报文最大字节（MSS和MTU）_luck_horse的博客-CSDN博客_tcp最大发送字节](<a href="https://blog.csdn.net/qinrenzhi/article/details/85340048" target="_blank" rel="noopener">https://blog.csdn.net/qinrenzhi/article/details/85340048</a>))</p>
-<p><a href="https://www.cnblogs.com/songyuchen/p/14038180.html" target="_blank" rel="noopener"><a href="https://www.cnblogs.com/songyuchen/p/14038180.html" target="_blank" rel="noopener">关于c++中sleep_for函数的总结分析</a></a></p>
 ]]></content>
   </entry>
   <entry>
